@@ -7,7 +7,6 @@ import math
 
 class MotionAnalyzer:
     def __init__(self):
-        # Initialize MediaPipe Pose
         self.mp_pose = mp.solutions.pose
         self.pose_engine = self.mp_pose.Pose(
             static_image_mode=False,
