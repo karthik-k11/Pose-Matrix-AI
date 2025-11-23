@@ -17,6 +17,6 @@ class MotionAnalyzer:
         )
 
         # Constants for Visuals
-        self.COLOR_PRIMARY = (0, 255, 255)   
-        self.COLOR_SECONDARY = (0, 255, 0)   
-        self.COLOR_ALERT = (0, 0, 255)       
+        self.COLOR_PRIMARY = (0, 255, 255)   # Cyan
+        self.COLOR_SECONDARY = (0, 255, 0)   # Matrix Green
+        self.COLOR_ALERT = (0, 0, 255)       # Red
