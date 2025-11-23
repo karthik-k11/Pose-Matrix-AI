@@ -15,3 +15,8 @@ class MotionAnalyzer:
             min_detection_confidence=0.6,
             min_tracking_confidence=0.6
         )
+
+        # Constants for Visuals
+        self.COLOR_PRIMARY = (0, 255, 255)   
+        self.COLOR_SECONDARY = (0, 255, 0)   
+        self.COLOR_ALERT = (0, 0, 255)       
