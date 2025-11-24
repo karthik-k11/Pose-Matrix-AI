@@ -25,3 +25,8 @@ class MotionAnalyzer:
         self.prev_landmarks = None
         self.activity_level = 0
         self.frame_counter = 0
+
+        # 3D Plot Setup
+        self.fig = plt.figure(figsize=(6, 6))
+        self.ax = self.fig.add_subplot(111, projection='3d')
+        self.setup_3d_plot()
