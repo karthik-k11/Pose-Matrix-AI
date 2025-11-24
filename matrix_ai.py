@@ -43,3 +43,34 @@ class MotionAnalyzer:
                 return 0
             
             movement = 0
+            # Check movement of wrists and ankles (indices 15, 16, 27, 28)
+        key_joints = [15, 16, 27, 28] 
+        for idx in key_joints:
+            c = current_landmarks[idx]
+            p = self.prev_landmarks[idx]
+            dist = math.sqrt((c.x - p.x)**2 + (c.y - p.y)**2)
+            movement += dist
+            
+        return movement * 100 # Scale up for visibility
+
+    def draw_tech_overlay(self, image, intensity):
+        """Draws the HUD interface elements."""
+        h, w, _ = image.shape
+        
+        # Draw border corners
+        l = 30 # line length
+        t = 2  # thickness
+        c = self.COLOR_SECONDARY
+        
+        # Top Left
+        cv2.line(image, (10, 10), (10 + l, 10), c, t)
+        cv2.line(image, (10, 10), (10, 10 + l), c, t)
+        
+        # Bottom Right
+        cv2.line(image, (w-10, h-10), (w-10-l, h-10), c, t)
+        cv2.line(image, (w-10, h-10), (w-10, h-10-l), c, t)
+
+        # Activity Bar (Dynamic)
+        bar_width = 200
+        bar_height = 15
+        fill = int(min(intensity * 20, bar_width))
