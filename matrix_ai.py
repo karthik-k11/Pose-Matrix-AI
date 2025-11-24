@@ -30,3 +30,16 @@ class MotionAnalyzer:
         self.fig = plt.figure(figsize=(6, 6))
         self.ax = self.fig.add_subplot(111, projection='3d')
         self.setup_3d_plot()
+
+        def setup_3d_plot(self):
+            self.ax.set_facecolor('#001100') # Dark Green/Black background
+            self.ax.grid(False)
+            self.ax.set_title("SPATIAL MAPPING", color='green', fontsize=10)
+            plt.ion()
+
+        def calculate_movement_intensity(self, current_landmarks):
+            """Calculates how much the user moved since the last frame."""
+            if self.prev_landmarks is None:
+                return 0
+            
+            movement = 0
