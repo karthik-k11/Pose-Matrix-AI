@@ -17,7 +17,7 @@ class MotionAnalyzer:
             min_tracking_confidence=0.6
         )
         
-        # Constants for Visuals (The "Cyber" Theme)
+        # Constants for Visuals
         self.COLOR_PRIMARY = (0, 255, 255)   # Cyan
         self.COLOR_SECONDARY = (0, 255, 0)   # Matrix Green
         self.COLOR_ALERT = (0, 0, 255)       # Red
@@ -33,7 +33,7 @@ class MotionAnalyzer:
         self.setup_3d_plot()
         
     def setup_3d_plot(self):
-        self.ax.set_facecolor('#001100') # Dark Green/Black background
+        self.ax.set_facecolor('#001100')
         self.ax.grid(False)
         self.ax.set_title("SPATIAL MAPPING", color='green', fontsize=10)
         plt.ion()
@@ -44,7 +44,7 @@ class MotionAnalyzer:
             return 0
             
         movement = 0
-        # Check movement of wrists and ankles (indices 15, 16, 27, 28)
+        # Check movement of wrists and ankles 
         key_joints = [15, 16, 27, 28] 
         for idx in key_joints:
             c = current_landmarks[idx]
@@ -52,15 +52,15 @@ class MotionAnalyzer:
             dist = math.sqrt((c.x - p.x)**2 + (c.y - p.y)**2)
             movement += dist
             
-        return movement * 100 # Scale up for visibility
+        return movement * 100
 
     def draw_tech_overlay(self, image, intensity):
         """Draws the HUD interface elements."""
         h, w, _ = image.shape
         
         # Draw border corners
-        l = 30 # line length
-        t = 2  # thickness
+        l = 30 
+        t = 2  
         c = self.COLOR_SECONDARY
         
         # Top Left
@@ -93,19 +93,18 @@ class MotionAnalyzer:
         
         display_frame = frame.copy()
         
-        # Darken the background for "Hacker" vibe
+        # Darken the background 
         overlay = np.zeros_like(frame)
         display_frame = cv2.addWeighted(display_frame, 0.7, overlay, 0.3, 0)
 
         if results.pose_landmarks:
             landmarks = results.pose_landmarks.landmark
             
-            # 1. Calculate Logic
+            #Calculate Logic
             curr_intensity = self.calculate_movement_intensity(landmarks)
-            # Smooth the value
             self.activity_level = 0.8 * self.activity_level + 0.2 * curr_intensity
             
-            # 2. Draw Skeleton (The "Tech" Style)
+            #Draw Skeleton )
             connections = self.mp_pose.POSE_CONNECTIONS
             
             # Convert to pixel coords
@@ -113,7 +112,7 @@ class MotionAnalyzer:
             for idx, lm in enumerate(landmarks):
                 px_points[idx] = (int(lm.x * w), int(lm.y * h))
 
-            # Draw Lines (Tech style: Thin lines with nodes)
+            # Draw Lines
             for start_idx, end_idx in connections:
                 if start_idx in px_points and end_idx in px_points:
                     pt1 = px_points[start_idx]
@@ -124,11 +123,11 @@ class MotionAnalyzer:
                     
                     cv2.line(display_frame, pt1, pt2, line_color, 1)
                     
-            # Draw Nodes (Squares instead of circles for "digital" look)
+            # Draw Nodes
             for idx, pt in px_points.items():
                 cv2.rectangle(display_frame, (pt[0]-2, pt[1]-2), (pt[0]+2, pt[1]+2), self.COLOR_PRIMARY, -1)
 
-            # 3. Update 3D Plot (Optimized: Every 5th frame)
+            # 3. Update 3D Plot
             if self.frame_counter % 5 == 0:
                 self.update_3d_view(landmarks)
                 
