@@ -74,3 +74,10 @@ class MotionAnalyzer:
         bar_width = 200
         bar_height = 15
         fill = int(min(intensity * 20, bar_width))
+
+        cv2.rectangle(image, (20, h-40), (20 + bar_width, h-25), (0, 50, 0), 1)
+        cv2.rectangle(image, (20, h-40), (20 + fill, h-25), self.COLOR_PRIMARY, -1)
+        cv2.putText(image, f"KINETIC OUTPUT: {int(intensity*100)}%", (20, h-50), 
+                    cv2.FONT_HERSHEY_PLAIN, 1, self.COLOR_SECONDARY, 1)
+        
+        
