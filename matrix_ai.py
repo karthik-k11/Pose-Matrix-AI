@@ -97,4 +97,64 @@ class MotionAnalyzer:
         display_frame = cv2.addWeighted(display_frame, 0.7, overlay, 0.3, 0)
 
         if results.pose_landmarks:
-            landmarks = results.pose_landmarks.landmark   
+            landmarks = results.pose_landmarks.landmark  
+
+            # 1. Calculate Logic
+            curr_intensity = self.calculate_movement_intensity(landmarks)
+            # Smooth the value
+            self.activity_level = 0.8 * self.activity_level + 0.2 * curr_intensity
+            
+            # 2. Draw Skeleton 
+            connections = self.mp_pose.POSE_CONNECTIONS
+            
+            # Convert to pixel coords
+            px_points = {}
+            for idx, lm in enumerate(landmarks):
+                px_points[idx] = (int(lm.x * w), int(lm.y * h))
+
+            # Draw Lines 
+            for start_idx, end_idx in connections:
+                if start_idx in px_points and end_idx in px_points:
+                    pt1 = px_points[start_idx]
+                    pt2 = px_points[end_idx]
+                    
+                    # Dynamic color based on intensity
+                    line_color = self.COLOR_SECONDARY if self.activity_level < 1.5 else self.COLOR_ALERT
+                    
+                    cv2.line(display_frame, pt1, pt2, line_color, 1)
+                    
+            # Draw Nodes 
+            for idx, pt in px_points.items():
+                cv2.rectangle(display_frame, (pt[0]-2, pt[1]-2), (pt[0]+2, pt[1]+2), self.COLOR_PRIMARY, -1)
+
+            # 3. Update 3D Plot 
+            if self.frame_counter % 5 == 0:
+                self.update_3d_view(landmarks)
+                
+            self.prev_landmarks = landmarks
+            
+        # Draw HUD
+        self.draw_tech_overlay(display_frame, self.activity_level)
+        
+        return display_frame
+
+    def update_3d_view(self, landmarks):
+        self.ax.clear()
+        self.ax.set_xlim([0, 1])
+        self.ax.set_ylim([0, 1])
+        self.ax.set_zlim([-1, 1])
+        self.ax.set_facecolor('#001100')
+        self.ax.set_xticks([])
+        self.ax.set_yticks([])
+        self.ax.set_zticks([])
+        
+        # Extract coordinates
+        xs = [lm.x for lm in landmarks]
+        ys = [lm.z for lm in landmarks] # Swapped Y and Z for better 3D viewing angle
+        zs = [-lm.y for lm in landmarks] # Inverted Y for upright orientation
+
+        self.ax.scatter(xs, ys, zs, c='cyan', s=20, marker='s') 
+        
+        # Draw connections manually for 3D
+        for start, end in self.mp_pose.POSE_CONNECTIONS:
+            self.ax.plot([xs[start], xs[end]], [ys[start], ys[end]], [zs[start], zs[end]], c='lime', linewidth=1) 
