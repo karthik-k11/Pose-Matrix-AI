@@ -80,4 +80,21 @@ class MotionAnalyzer:
         cv2.putText(image, f"KINETIC OUTPUT: {int(intensity*100)}%", (20, h-50), 
                     cv2.FONT_HERSHEY_PLAIN, 1, self.COLOR_SECONDARY, 1)
         
+    def process_frame(self, frame):
+        self.frame_counter += 1
         
+        # Flip for mirror effect
+        frame = cv2.flip(frame, 1)
+        h, w, _ = frame.shape
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        
+        results = self.pose_engine.process(rgb_frame)
+        
+        display_frame = frame.copy()
+        
+        # Darken the background
+        overlay = np.zeros_like(frame)
+        display_frame = cv2.addWeighted(display_frame, 0.7, overlay, 0.3, 0)
+
+        if results.pose_landmarks:
+            landmarks = results.pose_landmarks.landmark   
