@@ -2,9 +2,6 @@
 
 **A real-time kinetic motion analysis system featuring a sci-fi HUD overlay and 3D spatial mapping, built with OpenCV and MediaPipe.**
 
-![Project Demo](demo.png)
-*(Note: Add a screenshot of your project here named demo.png)*
-
 ## 🔍 Overview
 **Pose-Matrix-AI** is a computer vision tool designed to analyze human movement in real-time. Unlike standard pose detectors, this system calculates a **"Kinetic Energy" index**—a dynamic metric that visualizes the intensity of physical movement through a Heads-Up Display (HUD).
 
