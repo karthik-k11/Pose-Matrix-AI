@@ -59,5 +59,4 @@ It features a "Matrix-style" aesthetic and includes a synchronized 3D spatial pl
 ## 🧩 How It Works
 The system uses **MediaPipe Pose** to extract 33 skeletal landmarks. The `MotionAnalyzer` class calculates the Euclidean distance of key joints (wrists, ankles) between frames to derive a "movement delta." This delta is smoothed and mapped to the visual interface, creating a responsive activity meter.
 
-## 📄 License
-This project is open-source and available under the MIT License.
+This project is open-source
