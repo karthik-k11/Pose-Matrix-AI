@@ -71,7 +71,7 @@ class MotionAnalyzer:
         cv2.line(image, (w-10, h-10), (w-10-l, h-10), c, t)
         cv2.line(image, (w-10, h-10), (w-10, h-10-l), c, t)
 
-        # Activity Bar (Dynamic)
+        # Activity Bar
         bar_width = 200
         bar_height = 15
         fill = int(min(intensity * 20, bar_width))
@@ -104,7 +104,7 @@ class MotionAnalyzer:
             curr_intensity = self.calculate_movement_intensity(landmarks)
             self.activity_level = 0.8 * self.activity_level + 0.2 * curr_intensity
             
-            #Draw Skeleton )
+            #Draw Skeleton
             connections = self.mp_pose.POSE_CONNECTIONS
             
             # Convert to pixel coords
